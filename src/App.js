@@ -1,8 +1,12 @@
 import React from "react";
 
 import "./styles.css";
+import Repo from "./components/Repo";
+import api from "./services/api";
 
 function App() {
+  const [repos, setRepos] = useState([]);
+
   async function handleAddRepository() {
     // TODO
   }
@@ -11,16 +15,12 @@ function App() {
     // TODO
   }
 
+  async function getRepos() {}
+
   return (
     <div>
       <ul data-testid="repository-list">
-        <li>
-          Repositório 1
-
-          <button onClick={() => handleRemoveRepository(1)}>
-            Remover
-          </button>
-        </li>
+        <Repo onPress={handleRemoveRepository(1)} />
       </ul>
 
       <button onClick={handleAddRepository}>Adicionar</button>
