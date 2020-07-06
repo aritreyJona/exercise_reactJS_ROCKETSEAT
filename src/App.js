@@ -5,12 +5,19 @@ import api from "./services/api";
 
 function App() {
   const [repos, setRepos] = useState([{ title: "hallo", id: "world" }]);
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
+  const [techs, setTechs] = useState("");
 
   async function handleAddRepository() {
+    const myTechs = techs.replaceAll(" ", "").split(",");
+    if ("" === title || "" === url || 0 === myTechs.length) {
+      alert("You need to fill in title, url and techs!");
+    }
     const response = await api.post(`/repositories`, {
-      title: "new Title",
-      url: "www.johanna.de",
-      techs: ["my", "list"],
+      title,
+      url,
+      techs: myTechs,
     });
     console.log(response.data);
     if (response.status === 200) {
@@ -20,11 +27,11 @@ function App() {
 
   async function handleRemoveRepository(id) {
     const response = await api.delete(`/repositories/${id}`);
-    if (response.status != 204) {
+    if (response.status !== 204) {
       alert("something went wrong");
     } else {
       const newRepos = [];
-      repos.map((repo) => (repo.id != id ? newRepos.push(repo) : null));
+      repos.map((repo) => (repo.id !== id ? newRepos.push(repo) : null));
       setRepos(newRepos);
     }
   }
@@ -45,7 +52,16 @@ function App() {
           </li>
         ))}
       </ul>
-
+      <h4>Title:</h4>
+      <input value={title} onChange={(evt) => setTitle(evt.target.value)} />
+      <h4>URL:</h4>
+      <input value={url} onChange={(evt) => setUrl(evt.target.value)} />
+      <h4>techs:</h4>
+      <input
+        value={techs}
+        placeholder={`please write the techs seperated with "," and without spaces`}
+        onChange={(evt) => setTechs(evt.target.value)}
+      />
       <button onClick={handleAddRepository}>Adicionar</button>
     </div>
   );
